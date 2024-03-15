@@ -77,7 +77,7 @@ def calc_prob(p: np.ndarray) -> tuple[bool, np.ndarray]:  # 计算概率
         return True, p
 
 
-MaxTriesPerLayer = 10
+MaxTriesPerLayer = 5
 
 
 def generate(song: Song(), pre_note: int, depth: int):  # 尝试根据 pre_note 、位置、和弦 生成当前位置的音符并递归
@@ -85,6 +85,8 @@ def generate(song: Song(), pre_note: int, depth: int):  # 尝试根据 pre_note 
     policy = None
 
     i, j = song.get_ij_loc(depth)
+
+    # select policy
 
     if pre_note != -1:  # 有前一个音符
         exist_policy, policy = calc_prob(table_chord_loc_pre_none_n1[chord_level[song.tune[i][0]]][j][pre_note])
@@ -97,21 +99,28 @@ def generate(song: Song(), pre_note: int, depth: int):  # 尝试根据 pre_note 
     if not exist_policy:
         return False
 
-    # 随机选择当前位置的音符
-    note_num = np.random.choice([int(i) for i in range(88)], size=1, p=policy)[0]
-    while pre_note == -1 and note_num == 0:  # 如果是第一个音符，不允许是休止符
-        note_num = np.random.choice([int(i) for i in range(88)], size=1, p=policy)[0]
-    note, high = to_note_high(note_num)
-    song.tune[i][1][j] = note
-    song.tune[i][2][j] = high
-
-    if depth == song.get_total_len() - 1:
-        return True
-
-    # 递归
+    # generate note
     for _ in range(MaxTriesPerLayer):
+
+        # 随机选择当前位置的音符
+        note_num = np.random.choice([int(i) for i in range(88)], size=1, p=policy)[0]
+        while pre_note == -1 and note_num == 0:  # 如果是第一个音符，不允许是休止符
+            note_num = np.random.choice([int(i) for i in range(88)], size=1, p=policy)[0]
+        note, high = to_note_high(note_num)
+        song.tune[i][1][j] = note
+        song.tune[i][2][j] = high
+
+        if depth == song.get_total_len() - 1:
+            return True
+
+        # 递归
         if generate(song, note, depth + 1):
             return True
+        else:
+            policy[note_num] = 0
+            exist_policy, policy = calc_prob(policy)
+            if not exist_policy:
+                return False
 
     return False
 
@@ -131,11 +140,8 @@ def musicgen(name: str, bpm: int, unit_len: float, units_perBar: int, chord_list
         for i in range(len(chord_list))
     ]
 
-    for _ in range(MaxTriesPerLayer):
-        if generate(song, -1, 0):
-            break
-    else:
-        assert False, "Failed to generate music"
+    if not generate(song, -1, 0):
+        assert "Failed to generate music"
 
     return song
 

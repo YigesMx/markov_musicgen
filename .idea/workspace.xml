@@ -28,7 +28,11 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Python.main.executor": "Run",
+    "Python.万有引力.executor": "Run",
     "Python.不能说的秘密.executor": "Run",
+    "Python.有何不可.executor": "Run",
+    "Python.花海.executor": "Run",
+    "Python.错位时空.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
@@ -63,7 +67,7 @@
       <updated>1710209504848</updated>
       <workItem from="1710209505935" duration="10291000" />
       <workItem from="1710242261099" duration="41000" />
-      <workItem from="1710242307810" duration="30053000" />
+      <workItem from="1710242307810" duration="32961000" />
     </task>
     <task id="LOCAL-00001" summary="init &amp; basic">
       <option name="closed" value="true" />
@@ -81,7 +85,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710489834211</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="rewrite">
+      <option name="closed" value="true" />
+      <created>1710490137038</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1710490137038</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -93,7 +105,7 @@
     <option name="LAST_COMMIT_MESSAGE" value="rewrite" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/musicgen$.coverage" NAME="不能说的秘密 覆盖结果" MODIFIED="1710486551454" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data" />
-    <SUITE FILE_PATH="coverage/musicgen$main.coverage" NAME="main 覆盖结果" MODIFIED="1710489710354" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/musicgen$.coverage" NAME="错位时空 覆盖结果" MODIFIED="1710492281572" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data" />
+    <SUITE FILE_PATH="coverage/musicgen$main.coverage" NAME="main 覆盖结果" MODIFIED="1710492422231" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
