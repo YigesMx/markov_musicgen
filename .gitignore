@@ -165,5 +165,8 @@ cython_debug/
 # pkl
 *.pkl
 
-#mid
+# mid
 temp.mid
+
+# test
+test.ipynb

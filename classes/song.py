@@ -13,20 +13,20 @@ class Song:
 
         self.bpm = 80
         self.key = ""
-        self.unitLen = 1 / 16
+        self.unit_len = 1 / 16
         # 4/4拍
-        self.unitsPerBar = 16
+        self.units_per_bar = 16
 
-    def get_cho_loc(self, x):
-        i = x // self.unitsPerBar
-        j = x % self.unitsPerBar
+    def get_ij_loc(self, x):
+        i = x // self.units_per_bar
+        j = x % self.units_per_bar
         return i, j
 
-    def get_note(self, i, j):
+    def get_note_high(self, i, j):
         return self.tune[i][1][j], self.tune[i][2][j]
 
     def get_total_len(self):
-        return len(self.tune) * self.unitsPerBar
+        return len(self.tune) * self.units_per_bar
 
     def mld_notes(self):
         default = 5  # 默认音高
@@ -43,8 +43,8 @@ class Song:
         loc = 0
         while loc < total_len:
 
-            i, j = self.get_cho_loc(loc)
-            note, high = self.get_note(i, j)
+            i, j = self.get_ij_loc(loc)
+            note, high = self.get_note_high(i, j)
 
             print(note, end='')
 
@@ -59,7 +59,7 @@ class Song:
 
             duration = 1
             while loc < total_len:
-                i, j = self.get_cho_loc(loc)
+                i, j = self.get_ij_loc(loc)
                 if self.tune[i][1][j] == -1:
                     duration += 1
                     loc += 1
@@ -68,8 +68,8 @@ class Song:
 
             print(" x " + str(duration))
 
-            dur.append(duration * self.unitLen)
-            itv.append(duration * self.unitLen)
+            dur.append(duration * self.unit_len)
+            itv.append(duration * self.unit_len)
 
         return mld, itv, dur, vol
 
