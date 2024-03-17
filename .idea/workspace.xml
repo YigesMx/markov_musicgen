@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9e3395eb-cd5f-4186-ac03-a8bfc9e2f59b" name="更改" comment="add policy del method">
+    <list default="true" id="9e3395eb-cd5f-4186-ac03-a8bfc9e2f59b" name="更改" comment="add policy del method //fixed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -67,7 +67,7 @@
       <updated>1710209504848</updated>
       <workItem from="1710209505935" duration="10291000" />
       <workItem from="1710242261099" duration="41000" />
-      <workItem from="1710242307810" duration="35554000" />
+      <workItem from="1710242307810" duration="38055000" />
     </task>
     <task id="LOCAL-00001" summary="init &amp; basic">
       <option name="closed" value="true" />
@@ -109,7 +109,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710493099131</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="add policy del method //fixed">
+      <option name="closed" value="true" />
+      <created>1710657549869</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1710657549869</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -119,10 +127,11 @@
     <MESSAGE value="init &amp; basic" />
     <MESSAGE value="rewrite" />
     <MESSAGE value="add policy del method" />
-    <option name="LAST_COMMIT_MESSAGE" value="add policy del method" />
+    <MESSAGE value="add policy del method //fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="add policy del method //fixed" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/musicgen$.coverage" NAME="错位时空 覆盖结果" MODIFIED="1710492281572" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data" />
-    <SUITE FILE_PATH="coverage/musicgen$main.coverage" NAME="main 覆盖结果" MODIFIED="1710493500285" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/musicgen$main.coverage" NAME="main 覆盖结果" MODIFIED="1710659982522" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
