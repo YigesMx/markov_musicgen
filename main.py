@@ -77,7 +77,7 @@ def calc_prob(p: np.ndarray) -> tuple[bool, np.ndarray]:  # 计算概率
         return True, p
 
 
-MaxTriesPerLayer = 5
+MaxTriesPerLayer = 10
 
 
 def generate(song: Song(), pre_note: int, depth: int):  # 尝试根据 pre_note 、位置、和弦 生成当前位置的音符并递归
@@ -88,10 +88,10 @@ def generate(song: Song(), pre_note: int, depth: int):  # 尝试根据 pre_note 
 
     # select policy
 
-    if pre_note != -1:  # 有前一个音符
+    if pre_note != 0:  # 有前一个音符
         exist_policy, policy = calc_prob(table_chord_loc_pre_none_n1[chord_level[song.tune[i][0]]][j][pre_note])
 
-    if pre_note == -1 or not exist_policy:  # 没有前一个音符，或者前一个音符的概率分布不存在
+    if pre_note == 0 or not exist_policy:  # 没有前一个音符，或者前一个音符的概率分布不存在
         #  将 policy 按 pre_note 方向相加
         table = table_chord_loc_pre_none_n1.sum(axis=2)
         exist_policy, policy = calc_prob(table[chord_level[song.tune[i][0]]][j])
@@ -104,7 +104,7 @@ def generate(song: Song(), pre_note: int, depth: int):  # 尝试根据 pre_note 
 
         # 随机选择当前位置的音符
         note_num = np.random.choice([int(i) for i in range(88)], size=1, p=policy)[0]
-        while pre_note == -1 and note_num == 0:  # 如果是第一个音符，不允许是休止符
+        while pre_note == 0 and note_num == 0:  # 如果是第一个音符，不允许是休止符
             note_num = np.random.choice([int(i) for i in range(88)], size=1, p=policy)[0]
         note, high = to_note_high(note_num)
         song.tune[i][1][j] = note
@@ -114,7 +114,7 @@ def generate(song: Song(), pre_note: int, depth: int):  # 尝试根据 pre_note 
             return True
 
         # 递归
-        if generate(song, note, depth + 1):
+        if generate(song, int(note_num), depth + 1):
             return True
         else:
             policy[note_num] = 0
@@ -140,7 +140,7 @@ def musicgen(name: str, bpm: int, unit_len: float, units_perBar: int, chord_list
         for i in range(len(chord_list))
     ]
 
-    if not generate(song, -1, 0):
+    if not generate(song, 0, 0):
         assert "Failed to generate music"
 
     return song
