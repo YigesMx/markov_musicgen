@@ -64,7 +64,7 @@ def do_statistics(songs: list[Song]):
 
     # print(table_chord_pre[:, :, 33:48])
     file = open('net.pkl', 'wb')
-    pickle.dump([table_chord_loc, table_chord_pre, table_chord_pre_next], file)
+    pickle.dump([table_chord_loc_pre_none_n1], file)
     file.close()
 
 
@@ -79,7 +79,7 @@ def calc_prob(p: np.ndarray) -> tuple[bool, np.ndarray]:  # 计算概率
 
 MaxTriesPerLayer = 1000
 
-def generate(song: Song(), pre_note: int, depth: int):  # 尝试根据 pre_note 、位置、和弦 生成当前位置的音符并递归
+def generate(song: Song(), pre_note: int, pre_note_none_n1: int, depth: int):  # 尝试根据 pre_note 、位置、和弦 生成当前位置的音符并递归
     exist_policy = False
     policy = None
 
@@ -88,7 +88,8 @@ def generate(song: Song(), pre_note: int, depth: int):  # 尝试根据 pre_note 
     # select policy
 
     if pre_note != -1:  # 有前一个音符
-        exist_policy, policy = calc_prob(table_chord_loc_pre_none_n1[chord_level[song.tune[i][0]]][j][pre_note])
+        # exist_policy, policy = calc_prob(table_chord_loc_pre_none_n1[chord_level[song.tune[i][0]]][j][pre_note])
+        exist_policy, policy = calc_prob(table_chord_loc_pre_none_n1[chord_level[song.tune[i][0]]][j][pre_note_none_n1])
 
     if pre_note == -1 or not exist_policy:  # 没有前一个音符，或者前一个音符的概率分布不存在
         #  将 policy 按 pre_note 方向相加
@@ -115,7 +116,8 @@ def generate(song: Song(), pre_note: int, depth: int):  # 尝试根据 pre_note 
             return True
 
         # 递归
-        if generate(song, int(note_num), depth + 1):
+        new_pre_note_none_n1 = pre_note_none_n1 if note_num == 0 else note_num
+        if generate(song=song, pre_note=int(note_num), pre_note_none_n1=new_pre_note_none_n1, depth=depth + 1):
             return True
         else:
             policy[note_num] = 0
@@ -141,7 +143,7 @@ def musicgen(name: str, bpm: int, unit_len: float, units_perBar: int, chord_list
         for i in range(len(chord_list))
     ]
 
-    if not generate(song, -1, 0):
+    if not generate(song=song, pre_note=-1, pre_note_none_n1=-1, depth=0):
         assert "Failed to generate music"
 
     return song
@@ -153,7 +155,7 @@ if __name__ == '__main__':
 
     chord_list = ['C', 'Am', 'F', 'G', 'C', 'Am', 'F', 'G']
     # chord_list = ['C', 'C', 'Am', 'Am', 'F', 'F', 'G', 'G']
-    # chord_list = ['C', 'C', 'Am', 'Am', 'F', 'F', 'G', 'G']
+    # chord_list = ['C', 'C', 'Am', 'Am']
     song = musicgen("test", 80, 1 / 16, 16, chord_list)
 
     print(song.tune)
