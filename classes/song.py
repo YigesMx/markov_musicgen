@@ -1,4 +1,5 @@
 from musicpy.musicpy import play
+# from musicpy.daw import daw
 from musicpy.structures import track, chord
 
 from utils.tools import level_name, chord_seq
@@ -82,18 +83,31 @@ class Song:
                 crd.append(note)
         return crd
 
-    def play(self):  # 播放tune
-
+    def get_trk(self):
         mld, itv, dur, vol = self.mld_notes()
 
         crd = self.crd_notes()
 
-        # 播放
-        play(track(
+        trk = track(
             content=chord(notes=mld, interval=itv, duration=dur, volume=vol) &
                     chord(notes=crd, interval=1 / 8, duration=1 / 8, volume=70),
             bpm=self.bpm,
             instrument=1,
-        ),
-            wait=True
-        )  # 速度，乐器
+        )
+
+        return trk
+
+    # def save_wav(self):
+    #     trk = self.get_trk()
+    #
+    #     new_daw = daw(num=1, name='export')
+    #     new_daw.play(trk)
+        # new_daw.export(trk, "export", "wav")
+
+    def play(self):  # 播放tune
+
+        trk = self.get_trk()
+        # 播放
+        play(trk, wait=True)
+
+
