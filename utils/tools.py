@@ -1,5 +1,5 @@
 level_name = {1: 'C', 2: 'D', 3: 'E', 4: 'F', 5: 'G', 6: 'A',
-              7: 'B', 12: 'C#', 23: 'D#', 45: 'F#', 56: 'G#', 67: 'A#'}  # 级数音名
+              7: 'B'}  # , 12: 'C#', 23: 'D#', 45: 'F#', 56: 'G#', 67: 'A#'}  # 级数音名
 
 # chord_seq = {
 #     'C': ['C3', 'E3', 'G3', 'C4', 'E4', 'C4', 'G3', 'E3'],
@@ -33,15 +33,31 @@ dig_level = {0: 1, 1: 12, 2: 2, 3: 23, 4: 3, 5: 4,
              6: 45, 7: 5, 8: 56, 9: 6, 10: 67, 11: 7}  # 数字级数化
 
 
+# def to_note_num(note, high):
+#     if note == -1:
+#         return 0
+#     else:
+#         return 12 * high + note + 39
+
 def to_note_num(note, high):
     if note == -1:
         return 0
     else:
-        return 12 * high + note + 39
+        note_num = note + 8 * high + 39
+        assert 0 <= note_num <= 87
+        return note_num
 
+
+# def to_note_high(num):
+#     if num == 0:
+#         return -1, 0
+#     else:
+#         return ((num - 39) % 12 + 12) % 12, (num - 39) // 12
 
 def to_note_high(num):
     if num == 0:
         return -1, 0
     else:
-        return ((num - 39) % 12 + 12) % 12, (num - 39) // 12
+        note, high = ((num - 39) % 8 + 8) % 8, (num - 39) // 8
+        assert -1 <= note <= 7 and -3 <= high <= 3, f'{note}, {high}'
+        return note, high

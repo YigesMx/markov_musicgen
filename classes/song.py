@@ -6,17 +6,17 @@ from utils.tools import level_name, chord_seq
 
 
 class Song:
-    def __init__(self):
-        self.name = ""  # 歌名
-        self.singer = ""  # 歌手
-        self.style = ""  # 风格
-        self.tune = []  # 只记录部分副歌
+    def __init__(self, name="", singer="", style="", bpm=80, key="", unit_len=1 / 16, units_per_bar=16):
+        self.name = name  # 歌名
+        self.singer = singer  # 歌手
+        self.style = style  # 风格
+        self.tune = []  # 曲谱
 
-        self.bpm = 80
-        self.key = ""
-        self.unit_len = 1 / 16
+        self.bpm = bpm  # 每分钟节拍数
+        self.key = key  # 调性
+        self.unit_len = unit_len  # 单位时长
         # 4/4拍
-        self.units_per_bar = 16
+        self.units_per_bar = units_per_bar  # 每小节的单位数
 
     def get_ij_loc(self, x):
         i = x // self.units_per_bar
@@ -97,11 +97,11 @@ class Song:
 
         return trk
 
-    # def save_wav(self):
-    #     trk = self.get_trk()
-    #
-    #     new_daw = daw(num=1, name='export')
-    #     new_daw.play(trk)
+    def save_wav(self):
+        trk = self.get_trk()
+
+        # new_daw = daw(num=1, name='export')
+        # new_daw.play(trk)
         # new_daw.export(trk, "export", "wav")
 
     def play(self):  # 播放tune
