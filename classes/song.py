@@ -24,7 +24,10 @@ class Song:
         return i, j
 
     def get_note_high(self, i, j):
-        return self.tune[i][1][j], self.tune[i][2][j]
+        if 0 <= i < len(self.tune) and 0 <= j < self.units_per_bar :
+            return self.tune[i][1][j], self.tune[i][2][j]
+        else:
+            return None, None
 
     def get_total_len(self):
         return len(self.tune) * self.units_per_bar

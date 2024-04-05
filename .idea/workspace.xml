@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9e3395eb-cd5f-4186-ac03-a8bfc9e2f59b" name="更改" comment="restruct">
+    <list default="true" id="9e3395eb-cd5f-4186-ac03-a8bfc9e2f59b" name="更改" comment="add prob_scale &amp; choose_from_policy method">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/song.py" beforeDir="false" afterPath="$PROJECT_DIR$/classes/song.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/花海.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/错位时空.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/gen.py" beforeDir="false" afterPath="$PROJECT_DIR$/gen.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/net.py" beforeDir="false" afterPath="$PROJECT_DIR$/net.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utils/tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/tools.py" afterDir="false" />
@@ -26,6 +28,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "YigesMx"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/YigesMx/markov_musicgen.git",
+    "accountId": "bb2903f8-b29e-4ba2-9a25-283e25e549d4"
+  }
+}]]></component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -38,27 +52,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.gen.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.万有引力.executor&quot;: &quot;Run&quot;,
-    &quot;Python.不能说的秘密.executor&quot;: &quot;Run&quot;,
-    &quot;Python.有何不可.executor&quot;: &quot;Run&quot;,
-    &quot;Python.花海.executor&quot;: &quot;Run&quot;,
-    &quot;Python.错位时空.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/yiges/Workstation/CodeSpace/DLSpace/musicgen/data&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.gen.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.net.executor": "Run",
+    "Python.万有引力.executor": "Run",
+    "Python.不能说的秘密.executor": "Run",
+    "Python.后会无期.executor": "Run",
+    "Python.搁浅.executor": "Run",
+    "Python.有何不可.executor": "Run",
+    "Python.枫.executor": "Run",
+    "Python.爱笑的眼睛.executor": "Run",
+    "Python.老男孩.executor": "Run",
+    "Python.背对背拥抱.executor": "Run",
+    "Python.花海.executor": "Run",
+    "Python.这一生关于你的风景.executor": "Run",
+    "Python.那些年.executor": "Run",
+    "Python.错位时空.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/yiges/Workstation/CodeSpace/DLSpace/musicgen/data",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/data" />
@@ -97,7 +121,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-09665e90c3a7-b11f5e8da5ad-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-233.15026.15" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-PY-241.14494.241" />
+        <option value="bundled-python-sdk-0509580d9d50-28c9f5db9ffe-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.14494.241" />
       </set>
     </attachedChunks>
   </component>
@@ -117,7 +142,9 @@
       <workItem from="1711368544716" duration="709000" />
       <workItem from="1711420035146" duration="1611000" />
       <workItem from="1711460919131" duration="2000" />
-      <workItem from="1711983591198" duration="4392000" />
+      <workItem from="1711983591198" duration="4772000" />
+      <workItem from="1712309474712" duration="47000" />
+      <workItem from="1712309735716" duration="10114000" />
     </task>
     <task id="LOCAL-00001" summary="init &amp; basic">
       <option name="closed" value="true" />
@@ -191,7 +218,15 @@
       <option name="project" value="LOCAL" />
       <updated>1711419941691</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="add prob_scale &amp; choose_from_policy method">
+      <option name="closed" value="true" />
+      <created>1711988166665</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1711988166665</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -204,11 +239,13 @@
     <MESSAGE value="add policy del method //fixed" />
     <MESSAGE value="use pre_none_n1 policy" />
     <MESSAGE value="restruct" />
-    <option name="LAST_COMMIT_MESSAGE" value="restruct" />
+    <MESSAGE value="add prob_scale &amp; choose_from_policy method" />
+    <option name="LAST_COMMIT_MESSAGE" value="add prob_scale &amp; choose_from_policy method" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/musicgen$gen.coverage" NAME="gen 覆盖结果" MODIFIED="1711987968614" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/musicgen$.coverage" NAME="错位时空 覆盖结果" MODIFIED="1710492281572" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data" />
+    <SUITE FILE_PATH="coverage/musicgen$.coverage" NAME="错位时空 覆盖结果" MODIFIED="1712324606779" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/data" />
     <SUITE FILE_PATH="coverage/musicgen$main.coverage" NAME="main 覆盖结果" MODIFIED="1710768812638" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/musicgen$gen.coverage" NAME="gen 覆盖结果" MODIFIED="1712325682689" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/musicgen$net.coverage" NAME="net 覆盖结果" MODIFIED="1712324911457" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

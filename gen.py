@@ -1,11 +1,13 @@
 import numpy as np
 
 from classes.song import Song
-from utils.tools import chord_level, to_note_high
-from net import learn, load_net
+from utils.tools import chord_level, to_note_high, to_note_num
+from net import learn, load_net, sub_net
 
 # learn()
-table_chord_loc_pre_none_n1, *_ = load_net()
+# table_chord_loc_pre_none_n1, table_chord_loc_pre_next, *_ = load_net()
+net = load_net()
+table_chord_loc_pre_none_n1 = sub_net(net, ['chord', 'loc', 'pre_none_n1'])
 
 
 def calc_prob(p: np.ndarray, prob_scale: float) -> tuple[bool, np.ndarray]:  # 计算概率
@@ -73,7 +75,8 @@ def generate(song: Song(), pre_note: int, pre_note_none_n1: int, depth: int, pro
 
     if pre_note == -1 or not exist_policy:  # 没有前一个音符，或者前一个音符的概率分布不存在
         #  将 policy 按 pre_note 方向相加
-        table = table_chord_loc_pre_none_n1.sum(axis=2)
+        # table = table_chord_loc_pre_none_n1.sum(axis=2)
+        table = sub_net(net, ['chord', 'loc'])
         exist_policy, policy = calc_prob(table[chord_level[song.tune[i][0]]][j], prob_scale)
 
     if not exist_policy:
@@ -109,7 +112,126 @@ def generate(song: Song(), pre_note: int, pre_note_none_n1: int, depth: int, pro
     return False
 
 
-def musicgen(chord_list: list[str], name: str, bpm: int, unit_len: float, units_per_bar: int,
+def generate_ni(song: Song(), base_table: list, pre_note: int, pre_note_none_n1: int, depth: int, step: int,
+                prob_scale: float = 1.0,
+                policy_mode: str = 'normal'):
+    exist_policy = False
+    policy = None
+
+    i, j = song.get_ij_loc(depth)
+
+    # select policy
+
+    if pre_note != -1:  # 有前一个音符
+        exist_policy, policy = calc_prob(base_table[chord_level[song.tune[i][0]]][j][pre_note_none_n1],
+                                         prob_scale)
+
+    if pre_note == -1 or not exist_policy:  # 没有前一个音符，或者前一个音符的概率分布不存在
+        #  将 policy 按 pre_note 方向相加
+        table = sub_net(net, ['chord', 'loc'])
+        exist_policy, policy = calc_prob(table[chord_level[song.tune[i][0]]][j], prob_scale)
+
+    if not exist_policy:
+        return False
+
+    # generate note
+    for _ in range(MaxTriesPerLayer):
+        # print(policy)
+
+        # 随机选择当前位置的音符
+        note_num = choose_from_policy(policy, policy_mode)
+        while pre_note == -1 and note_num == 0:  # 如果是第一个音符，不允许是延时符
+            note_num = choose_from_policy(policy, policy_mode)
+            _ += 1
+        note, high = to_note_high(note_num)
+        song.tune[i][1][j] = note
+        song.tune[i][2][j] = high
+
+        if depth >= song.get_total_len() - step:
+            return True
+
+        # 递归
+        new_pre_note_none_n1 = pre_note_none_n1 if note_num == 0 else note_num
+        if generate_ni(song=song, base_table=base_table, pre_note=int(note_num), pre_note_none_n1=new_pre_note_none_n1,
+                       depth=depth + step, step=step, prob_scale=prob_scale, policy_mode=policy_mode):
+            return True
+        else:
+            policy[note_num] = 0
+            exist_policy, policy = calc_prob(policy, prob_scale)
+            if not exist_policy:
+                return False
+
+    return False
+
+
+def generate_pre_next(song: Song(), base_table: list, depth: int, step: int,
+                 prob_scale: float = 1.0,
+                 policy_mode: str = 'normal'):
+    exist_policy = False
+    policy = None
+
+    i, j = song.get_ij_loc(depth)
+
+    # select policy
+
+    pre_note = to_note_num(*(song.get_note_high(i, j - 1)))
+    next_note = to_note_num(*(song.get_note_high(i, j + 1)))
+
+    if next_note is not None:
+        exist_policy, policy = calc_prob(base_table[chord_level[song.tune[i][0]]][pre_note][next_note],
+                                         prob_scale)
+    else:
+        # 将 policy 按 next_note 方向相加
+        table = sub_net(net, ['chord', 'pre'])
+        exist_policy, policy = calc_prob(table[chord_level[song.tune[i][0]]][pre_note], prob_scale)
+
+    if not exist_policy:
+        return False
+
+    # generate note
+    for _ in range(MaxTriesPerLayer):
+        # print(policy)
+
+        # 随机选择当前位置的音符
+        note_num = choose_from_policy(policy, policy_mode)
+        while pre_note == -1 and note_num == 0:  # 如果是第一个音符，不允许是延时符
+            note_num = choose_from_policy(policy, policy_mode)
+            _ += 1
+        note, high = to_note_high(note_num)
+        song.tune[i][1][j] = note
+        song.tune[i][2][j] = high
+
+        if depth >= song.get_total_len() - step:
+            return True
+
+        # 递归
+        if generate_pre_next(song=song, base_table=base_table, depth=depth + step, step=step,
+                             prob_scale=prob_scale, policy_mode=policy_mode):
+            return True
+        else:
+            policy[note_num] = 0
+            exist_policy, policy = calc_prob(policy, prob_scale)
+            if not exist_policy:
+                return False
+
+    return False
+
+
+def generate_with_rule(song: Song(), rule: list, prob_scale: float = 1.0, policy_mode: str = 'normal'):
+    step = len(rule)
+    for start, rule_line in enumerate(rule):
+        if 'next' not in rule_line:
+            if not generate_ni(song=song, base_table=sub_net(net, rule_line), pre_note=-1, pre_note_none_n1=-1,
+                               depth=start, step=step, prob_scale=prob_scale, policy_mode=policy_mode):
+                return False
+        else:
+            if not generate_pre_next(song=song, base_table=sub_net(net, rule_line), depth=start, step=step,
+                                     prob_scale=prob_scale, policy_mode=policy_mode):
+                return False
+    return True
+
+
+def musicgen(chord_list: list[str], rule: list, name: str, bpm: int, unit_len: float, units_per_bar: int,
              prob_scale: float = 1.0, policy_mode: str = 'normal') -> Song:
     song = Song(name=name, bpm=bpm, unit_len=unit_len, units_per_bar=units_per_bar)
     song.tune = [
@@ -121,19 +243,31 @@ def musicgen(chord_list: list[str], name: str, bpm: int, unit_len: float, units_
         for i in range(len(chord_list))
     ]
 
-    if not generate(song=song, pre_note=-1, pre_note_none_n1=-1, depth=0, prob_scale=prob_scale,
-                    policy_mode=policy_mode):
-        assert "Failed to generate music"
+    if not generate_with_rule(song=song, rule=rule, prob_scale=prob_scale, policy_mode=policy_mode): \
+            assert "Failed to generate music"
+
+    # if not generate(song=song, pre_note=-1, pre_note_none_n1=-1, depth=0, prob_scale=prob_scale,
+    #                 policy_mode=policy_mode):
+    #     assert "Failed to generate music"
 
     return song
 
 
 if __name__ == '__main__':
     chord = ['C', 'Am', 'F', 'G', 'C', 'Am', 'F', 'G']
+    r1 = [
+        ['chord', 'loc', 'pre_none_n1'],
+    ]
+    r2 = [
+        ['chord', 'loc', 'pre_none_n1'],
+        ['chord', 'pre', 'next']
+    ]
     # chord_list = ['C', 'C', 'Am', 'Am', 'F', 'F', 'G', 'G']
     # chord_list = ['C', 'C', 'Am', 'Am']
-    song = musicgen(chord, "test", bpm=80, unit_len=1 / 16, units_per_bar=16, prob_scale=1.0, policy_mode='normal')
+    new_song = musicgen(chord_list=chord, rule=r1, name="test", bpm=80, unit_len=1 / 16, units_per_bar=16,
+                        prob_scale=1.0,
+                        policy_mode='normal')
 
-    print(song.tune)
+    print(new_song.tune)
     # song.save_wav()
-    song.play()
+    new_song.play()
