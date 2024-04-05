@@ -40,6 +40,8 @@ dig_level = {0: 1, 1: 12, 2: 2, 3: 23, 4: 3, 5: 4,
 #         return 12 * high + note + 39
 
 def to_note_num(note, high):
+    if note is None:
+        return None
     if note == -1:
         return 0
     else:
