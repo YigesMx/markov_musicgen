@@ -42,8 +42,10 @@ dig_level = {0: 1, 1: 12, 2: 2, 3: 23, 4: 3, 5: 4,
 def to_note_num(note, high):
     if note is None:
         return None
-    if note == -1:
+    elif note == -1:
         return 0
+    elif note == 0:
+        return 39
     else:
         note_num = note + 8 * high + 39
         assert 0 <= note_num <= 87
@@ -59,6 +61,8 @@ def to_note_num(note, high):
 def to_note_high(num):
     if num == 0:
         return -1, 0
+    elif num == 39:
+        return 0, 0
     else:
         note, high = ((num - 39) % 8 + 8) % 8, (num - 39) // 8
         assert -1 <= note <= 7 and -3 <= high <= 3, f'{note}, {high}'

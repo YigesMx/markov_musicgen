@@ -4,6 +4,8 @@ from classes.song import Song
 from utils.tools import chord_level, to_note_high, to_note_num
 from net import learn, load_net, sub_net
 
+EPS = 1e-6
+
 # learn()
 # table_chord_loc_pre_none_n1, table_chord_loc_pre_next, *_ = load_net()
 net = load_net()
@@ -12,7 +14,7 @@ table_chord_loc_pre_none_n1 = sub_net(net, ['chord', 'loc', 'pre_none_n1'])
 
 def calc_prob(p: np.ndarray, prob_scale: float) -> tuple[bool, np.ndarray]:  # 计算概率
     p_sum = p.sum()
-    if p_sum == 0:
+    if p_sum < EPS:
         return False, p
     else:
         p = p / p_sum
@@ -173,9 +175,10 @@ def generate_pre_next(song: Song(), base_table: list, depth: int, step: int,
     i, j = song.get_ij_loc(depth)
 
     # select policy
-
-    pre_note = to_note_num(*(song.get_note_high(i, j - 1)))
-    next_note = to_note_num(*(song.get_note_high(i, j + 1)))
+    pre_i, pre_j = song.get_ij_loc(depth - 1)
+    pre_note = to_note_num(*(song.get_note_high(pre_i, pre_j)))
+    next_i, next_j = song.get_ij_loc(depth + 1)
+    next_note = to_note_num(*(song.get_note_high(next_i, next_j)))
 
     if next_note is not None:
         exist_policy, policy = calc_prob(base_table[chord_level[song.tune[i][0]]][pre_note][next_note],
@@ -194,9 +197,17 @@ def generate_pre_next(song: Song(), base_table: list, depth: int, step: int,
 
         # 随机选择当前位置的音符
         note_num = choose_from_policy(policy, policy_mode)
-        while pre_note == -1 and note_num == 0:  # 如果是第一个音符，不允许是延时符
+        while (note_num == 39 and next_note == 0) or (pre_note == 39 and note_num == 0):
+            # 如果后一个音符是延时符，不允许是空拍；如果前一个音符是空拍，不允许是延时符
             note_num = choose_from_policy(policy, policy_mode)
             _ += 1
+            if _ >= MaxTriesPerLayer:
+                return False
+        if pre_note == 39 and note_num == 0:
+            assert False, "pre_note == 39 and note_num == 0"
+        elif next_note == 0 and note_num == 39:
+            assert False, "next_note == 0 and note_num == 39"
+
         note, high = to_note_high(note_num)
         song.tune[i][1][j] = note
         song.tune[i][2][j] = high
@@ -255,6 +266,8 @@ def musicgen(chord_list: list[str], rule: list, name: str, bpm: int, unit_len: f
 
 if __name__ == '__main__':
     chord = ['C', 'Am', 'F', 'G', 'C', 'Am', 'F', 'G']
+    # chord = ['C', 'C', 'Am', 'Am', 'F', 'F', 'G', 'G']
+    # chord = ['C', 'C', 'Am', 'Am']
     r1 = [
         ['chord', 'loc', 'pre_none_n1'],
     ]
@@ -262,9 +275,7 @@ if __name__ == '__main__':
         ['chord', 'loc', 'pre_none_n1'],
         ['chord', 'pre', 'next']
     ]
-    # chord_list = ['C', 'C', 'Am', 'Am', 'F', 'F', 'G', 'G']
-    # chord_list = ['C', 'C', 'Am', 'Am']
-    new_song = musicgen(chord_list=chord, rule=r1, name="test", bpm=80, unit_len=1 / 16, units_per_bar=16,
+    new_song = musicgen(chord_list=chord, rule=r2, name="test", bpm=80, unit_len=1 / 16, units_per_bar=16,
                         prob_scale=1.0,
                         policy_mode='normal')
 

@@ -21,10 +21,11 @@ class Song:
     def get_ij_loc(self, x):
         i = x // self.units_per_bar
         j = x % self.units_per_bar
+        # assert 0 <= i < len(self.tune) and 0 <= j < self.units_per_bar
         return i, j
 
     def get_note_high(self, i, j):
-        if 0 <= i < len(self.tune) and 0 <= j < self.units_per_bar :
+        if 0 <= i < len(self.tune) and 0 <= j < self.units_per_bar:
             return self.tune[i][1][j], self.tune[i][2][j]
         else:
             return None, None
